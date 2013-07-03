@@ -1,15 +1,17 @@
 function EntradaTLB(params){
-    this.processo_id = params.processo_id;
-    this.n_pagina = params.n_pagina
+    this.processo_id = (params.processo_id || "");
+    this.n_pagina = (params.n_pagina || null);
     this.entrada_tp  = new EntradaTP();
 }
 
 function TLB(n_entradas){
     var self = this;
+    self.n_entradas = n_entradas;
     self.entradas = [];
     self.inicializar = function(){
-        for(var i= 0; i < 10; i++)
-            self.entradas.push(new EntradaTLB());
+        for(var i= 0; i < self.n_entradas; i++)
+            self.entradas.push(new EntradaTLB({}));
+        console.log(n_entradas);
     };
     var proxEntrada = -1;
     self.carregarEntrada = function(n_pagina, pagina){

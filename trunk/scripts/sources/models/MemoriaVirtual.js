@@ -1,13 +1,15 @@
 function MemoriaVirtual(params){
     var self = this;
+    self.tam_tlb = parseInt(params.tam_tlb);
     self.tam_mp = parseInt(params.tam_mp);
     self.tam_ms = parseInt(params.tam_ms);
-    self.tam_quadro = parseInt(params.tam_quadro)
+    self.tam_quadro = parseInt(params.tam_quadro);
+
     self.n_quadros = Math.ceil(self.tam_mp/self.tam_quadro);
 
-    self.tlb = new TLB();
-    self.mp = new MP(self.n_quadros);
-    self.ms = new MS(self.tam_ms);
+    self.tlb = ko.observable(new TLB(self.tam_tlb));
+    self.mp = ko.observable(new MP(self.n_quadros));
+    self.ms = ko.observable(new MS(self.tam_ms));
     self.tps = ko.observableArray([]);
 
     self.indexOfTP = function(processo_id){
@@ -20,7 +22,7 @@ function MemoriaVirtual(params){
     }
 
     self.carregarProcesso = function(processo){
-        self.ms.carregarProcesso(processo);
+        self.ms().carregarProcesso(processo);
         var n_paginas = Math.ceil(processo.tamanho/params.tam_quadro);
         self.tps.push(new TP(processo.id, n_paginas));
     }
@@ -49,12 +51,11 @@ function MemoriaVirtual(params){
         self.atualizaTLB(tp_entrada);
         return entradaTpProcesso;
     }
-}
 
     self.retornaQuadro = function(entrada_tp){
         var quadro;
         if(entrada_tp.p()){
-            quadro = self.mp.quadros[entrada_tp.n_quadro];
+            quadro = self.mp().quadros[entrada_tp.n_quadro];
         }
         else{
             alert('Page Fault!');
