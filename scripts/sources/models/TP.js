@@ -9,15 +9,11 @@ function TP(processo_id, n_entradas){
     var self = this;
     self.processo_id = processo_id;
     self.n_entradas = n_entradas;
-    self.entradas = ko.observableArray([]);
+    self.entradas = [];
     
     self.inicializar = function(){
        for(var i = 0; i < self.n_entradas;i++)
             self.entradas.push(new EntradaTP());
-    }
-
-    self.getEntrada = function(i){
-        return self.entradas()[i];
     }
 
     self.carregaEntrada = function(i, n_quadro){
