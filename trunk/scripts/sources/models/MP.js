@@ -3,10 +3,23 @@ function Quadro(){
     this.m = ko.observable(false);
     this.pagina = ko.observable(null);
 }
-function MP(n_quadros){
+function MP(n_quadros, lru){
     var self = this;
+    self.lru = lru;
     self.n_quadros = n_quadros;
     self.quadros = [];
+    self.filaSubstituicao = ko.observableArray([]);
+
+    self.queue = function(quadroIndice){
+        var pos = $.inArray(quadroIndice, self.filaSubstituicao());
+        if(pos != -1)
+            self.filaSubstituicao(self.filaSubstituicao().splice(pos,1));
+
+        if(self.filaSubstituicao.length > self.n_quadros)
+            self.filaSubstituicao.unshift();
+
+        self.filaSubstituicao.push(quadroIndice);
+    }
 
     self.inicializar = function(){
         for(var i=0; i< self.n_quadros; i++){
@@ -18,26 +31,29 @@ function MP(n_quadros){
         var quadro = self.quadros[i];
         quadro = pagina;
         quadro.u(true);
+        self.queue(i);
     }
-    
+
     self.modificarQuadro = function(i,pagina){
         var quadro = self.quadros[i];
         quadro.pagina = pagina;
         quadro.m(true);
+        if (self.lru)
+            self.queue(i);
     }
-    
+
     self.getQuadro = function(i){
+        if (self.lru)
+            self.queue(i);
         return self.quadros[i];
     }
-    
-    self.getQuadroLivre = function(){
-        var index = null;
-        var quadro = null;
-        for(var i=0; i < self.n_quadros; i++){
-            quadro = self.getQuadro(i);
-            if(quadro.u() == false)
-                return i;
-        }
+
+    self.getIndiceQuadroLivre = function(){
+        var index;
+        $.each(self.quadros,function(i, quadro){
+            index = i;
+            if(!quadro.u()) return false;
+        })
         return index;
     }
     self.inicializar();
