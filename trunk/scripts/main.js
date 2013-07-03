@@ -2,6 +2,5 @@ require(["sources/MemoriaVirtualViewModel","sources/models/Pedido","sources/mode
     $(document).ready(function(){
         viewmodel = new MemoriaVirtualViewModel();
         ko.applyBindings(viewmodel);
-        log = console.log;
     });
 });

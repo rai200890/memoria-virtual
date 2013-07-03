@@ -3,7 +3,7 @@ function MS(tamanho){
     self.disponivel = ko.observable(tamanho);
     self.processos = ko.observableArray([]);
 
-    self.carregarPaginas = function(processo){
+    self.carregarProcesso = function(processo){
         if (processo.tamanho <= self.disponivel()){
             self.processos.push(processo);
             self.disponivel(self.disponivel() - processo.tamanho);

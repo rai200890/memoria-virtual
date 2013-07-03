@@ -4,6 +4,7 @@ function EntradaTP(){
     this.n_quadro = ko.observable(null);
 }
 //na escrita seta bit de modificado
+//4 é o tamanho do conjunto residente
 function TP(processo_id, n_entradas){
     var self = this;
     self.processo_id = processo_id;
@@ -11,27 +12,29 @@ function TP(processo_id, n_entradas){
     self.entradas = ko.observableArray([]);
     
     self.inicializar = function(){
-        for(var i = 0; i < self.n_entradas;i++)
+       for(var i = 0; i < self.n_entradas;i++)
             self.entradas.push(new EntradaTP());
     }
 
-    self.carregarEntrada = function(i, n_quadro){
-        var entrada = self.entradas()(i);
+    self.getEntrada = function(i){
+        return self.entradas()[i];
+    }
+
+    self.carregaEntrada = function(i, n_quadro){
+        var entrada = self.getEntrada(i);
         entrada.p(true);
         entrada.n_quadro(n_quadro);
     }
 
-    self.modificarEntrada = function(i){
-        var entrada = self.entradas()(i);
+    self.modificaEntrada = function(i){
+        var entrada = self.getEntrada(i);
         entrada.m(true);
     }
     
     self.conjuntoResidente = ko.computed(function(){
         var conjunto = [];
         $.each(self.entradas, function(index, entrada){
-            if(entrada.p) conjunto.push({
-                index : entrada
-            });
+            if(entrada.p) conjunto[index] = entrada;
         });
         return conjunto;
     });

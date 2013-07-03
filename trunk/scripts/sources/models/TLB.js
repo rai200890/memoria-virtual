@@ -1,41 +1,39 @@
 function EntradaTLB(params){
-    this.processo_id = ko.observable(params.processo_id||null);
-    this.n_pagina = ko.observable(params.n_pagina || null);
-    this.entrada_tp = ko.observable(new EntradaTP());
+    this.processo_id = params.processo_id;
+    this.n_pagina = params.n_pagina
+    this.entrada_tp  = new EntradaTP();
 }
 
 function TLB(n_entradas){
     var self = this;
     self.entradas = [];
-    //próxima entrada a ser substituida na tlb
-    var proxEntrada = -1;
-
-    self.incrementarProxEntrada = function(){
-        proxEntrada = (proxEntrada + 1) % n_entradas;
-        return proxEntrada
-    }
-    
     self.inicializar = function(){
-        for(var i= 0; i < n_entradas; i++)
-            self.entradas.push(new EntradaTLB({}));
+        for(var i= 0; i < 10; i++)
+            self.entradas.push(new EntradaTLB());
     };
-    
-    self.buscarEntradaTP = function(processo_id, n_pagina){
-        var resposta = null;
-        $.each(self.entradas(), function(index, entrada){
-            if(entrada.processo_id() == processo_id && entrada.n_pagina() == n_pagina)
-                resposta = entrada.entrada_tp;
-        });
-        return resposta;
+    var proxEntrada = -1;
+    self.carregarEntrada = function(n_pagina, pagina){
+        proxEntrada = (proxEntrada + 1) % n_entradas;
+        var entrada_tlb = self.getEntradaTLB(proxEntrada);
+        if (entrada_tlb.entrada_tp.p)
+            alert("SWAP OUT - GRAVAR EM MS");
+        self.entradas[proxEntrada] = new EntradaTLB(n_pagina,pagina);
     }
-
-    self.carregarEntradaTP = function(processo_id,n_pagina, entrada_tp){
-        var prox = self.incrementarProxEntrada();
-        var entrada_tlb = self.entradas()[prox];
-        
-        entrada_tlb.processo_id(processo_id);
-        entrada_tlb.n_pagina(n_pagina);
-        entrada_tlb.entrada_tp(entrada_tp);
+    
+    self.getEntradaTLB = function(i){
+        return self.entradas[i];
+    }
+    self.setEntradaTLB = function(i, entrada){
+        self.entradas[i] = entrada;
+    }
+    
+    self.buscarPaginaProcesso = function(processo_id, n_pagina){
+        var pagina = null;
+        $.each(self.entradas, function(i,entrada){
+            if(entrada.n_pagina == n_pagina)
+                pagina = entrada.pagina;
+        });
+        return pagina;
     }
     self.inicializar();
 }
