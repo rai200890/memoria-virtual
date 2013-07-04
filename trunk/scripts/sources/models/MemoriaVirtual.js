@@ -50,26 +50,26 @@ function MemoriaVirtual(params){
     }
 
     self.swapQuadro = function(processo_id,entrada_tp, n_pagina){
-        var indice = self.mp().filaSubstituicao().unshift();
+        var indice = self.mp().filaSubstituicao().shift();
         if (entrada_tp.m())
             alert("Swap-Out da página para MS");
         alert("Swap-In página da MS para MP");
         entrada_tp.n_quadro(indice);
         entrada_tp.p(true);
+        self.mp().carregaQuadro(indice);
         self.tlb().carregaEntrada(processo_id,n_pagina,entrada_tp);
     }
 
     self.retornarQuadroMP = function(processo_id, entrada_tp, n_pagina){
         var quadro, indiceQuadro;
         if(entrada_tp.p()){
-            quadro = self.mp().quadros[entrada_tp.n_quadro()];
+            quadro = self.mp().getQuadro(entrada_tp.n_quadro());
         }
         else{
             alert('Page Fault!');
             indiceQuadro = self.mp().getIndiceQuadroLivre();
-            log(indiceQuadro);
             if(indiceQuadro != null){
-                quadro = self.mp().getQuadro(indiceQuadro);
+                quadro = self.mp().carregaQuadro(indiceQuadro);
                 entrada_tp.n_quadro(indiceQuadro);
                 entrada_tp.p(true);
                 self.tlb().carregaEntrada(processo_id,n_pagina,entrada_tp);
@@ -77,9 +77,8 @@ function MemoriaVirtual(params){
             else{
                 quadro = self.swapQuadro(processo_id, entrada_tp, n_pagina);
             }
-            quadro.u(true);
         }
-        if(entrada_tp.m()) self.mp().modificarQuadro(entrada_tp.n_quadro(),n_pagina)
+        if(entrada_tp.m()) self.mp().modificaQuadro(entrada_tp.n_quadro(),n_pagina)
         return quadro;
     }
 
