@@ -5,10 +5,11 @@ function MemoriaVirtualViewModel(){
         tam_mp: 1024,
         tam_ms: 4096,
         tam_quadro : 64,
-        lru : false,
-        escopo_substituicao: null
+        politica : 'LRU',
+        escopo_substituicao: null,
+        tam_endereco : 10
     });
-
+    self.politicas =
     self.memoriaVirtual = ko.observable(new MemoriaVirtual(self.params()));
 
     self.novoProcesso = ko.observable(new Processo());
@@ -24,7 +25,11 @@ function MemoriaVirtualViewModel(){
     }
 
     self.fazerPedido = function(){
-        self.memoriaVirtual().processaPedido(self.novoPedido());
+        self.memoriaVirtual().processaPedido({
+            endereco_virtual : self.novoPedido().endereco_virtual,
+            processo_id : self.novoPedido().processo_id,
+            escrita : self.novoPedido().escrita
+        });
     }
 
     self.carregarProcesso = function(){

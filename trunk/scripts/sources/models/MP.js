@@ -3,9 +3,9 @@ function Quadro(){
     this.m = ko.observable(false);
     this.pagina = ko.observable(null);
 }
-function MP(n_quadros, lru){
+function MP(n_quadros, politica){
     var self = this;
-    self.lru = lru;
+    self.politica = politica;
     self.n_quadros = n_quadros;
     self.quadros = [];
     self.filaSubstituicao = ko.observableArray([]);
@@ -38,12 +38,12 @@ function MP(n_quadros, lru){
         var quadro = self.quadros[i];
         quadro.pagina = pagina;
         quadro.m(true);
-        if (self.lru)
+        if (self.politica == "LRU")
             self.queue(i);
     }
 
     self.getQuadro = function(i){
-        if (self.lru)
+        if (self.politica == "LRU")
             self.queue(i);
         return self.quadros[i];
     }
