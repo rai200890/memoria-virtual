@@ -15,6 +15,17 @@ function MemoriaVirtual(params){
     self.ms = ko.observable(new MS(self.tam_ms));
     self.tps = ko.observableArray([]);
 
+    self.processoExiste = function(processo_id){
+        var resposta = false;
+        $.each(self.tps(), function(index, tp){
+            if(tp.processo_id == processo_id){
+                resposta = true;
+                return false;
+            }
+        });
+        return resposta;
+    }
+
     self.carregarProcesso = function(processo){
         var n_paginas = Math.ceil(processo.tamanho/self.tam_quadro);
         if(processo.tamanho > self.tam_mp){
@@ -49,6 +60,19 @@ function MemoriaVirtual(params){
         return entradaTP;
     }
 
+    self.removeEntradaSubstituida = function(processo_id, quadro){
+        var entradaSubstituida
+        $.each(self.tps(), function(i, tp){
+            $.each(tp.entradas, function(j, entrada_tp){
+                if(entrada_tp.p() && entrada_tp.n_quadro() == quadro && tp.processo_id != processo_id){
+                    entradaSubstituida = entrada_tp;
+                }
+                return false;
+            })
+        })
+        entradaSubstituida.p(false);
+    }
+
     self.swapQuadro = function(processo_id,entrada_tp, n_pagina){
         var indice = self.mp().filaSubstituicao().shift();
         if (entrada_tp.m())
@@ -57,6 +81,9 @@ function MemoriaVirtual(params){
         entrada_tp.n_quadro(indice);
         entrada_tp.p(true);
         self.mp().carregaQuadro(indice);
+
+        self.removeEntradaSubstituida(processo_id, indice);
+
         self.tlb().carregaEntrada(processo_id,n_pagina,entrada_tp);
     }
 
@@ -66,7 +93,7 @@ function MemoriaVirtual(params){
             quadro = self.mp().getQuadro(entrada_tp.n_quadro());
         }
         else{
-            alert('Page Fault!');
+            alert('Falta de Página!');
             indiceQuadro = self.mp().getIndiceQuadroLivre();
             if(indiceQuadro != null){
                 quadro = self.mp().carregaQuadro(indiceQuadro);
@@ -75,6 +102,7 @@ function MemoriaVirtual(params){
                 self.tlb().carregaEntrada(processo_id,n_pagina,entrada_tp);
             }
             else{
+                alert('Memória Principal Cheia! Chamar política de susbstituição!');
                 quadro = self.swapQuadro(processo_id, entrada_tp, n_pagina);
             }
         }
@@ -91,21 +119,25 @@ function MemoriaVirtual(params){
     }
 
     self.processaPedido = function(pedido){
-        if(enderecoValido(pedido.endereco_virtual)){
-            var quadro,
-                n_pagina = self.obterPaginaEndVirtual(pedido.endereco_virtual),
-                entrada_tlb = self.buscarEntradaTLB(pedido.processo_id, n_pagina),
-                entrada_tp;
-            if(entrada_tlb)
-                entrada_tp = entrada_tlb.entrada_tp();
-            else{
-                entrada_tp = self.buscarEntradaTP(pedido.processo_id, n_pagina);
+        if (self.processoExiste(pedido.processo_id)){
+            if(enderecoValido(pedido.endereco_virtual)){
+                var quadro,
+                    n_pagina = self.obterPaginaEndVirtual(pedido.endereco_virtual),
+                    entrada_tlb = self.buscarEntradaTLB(pedido.processo_id, n_pagina),
+                    entrada_tp;
+                if(entrada_tlb)
+                    entrada_tp = entrada_tlb.entrada_tp();
+                else{
+                    entrada_tp = self.buscarEntradaTP(pedido.processo_id, n_pagina);
+                }
+                if(pedido.escrita) entrada_tp.m(true)
+                quadro = self.retornarQuadroMP(pedido.processo_id,entrada_tp, n_pagina);
             }
-            if(pedido.escrita) entrada_tp.m(true)
-            quadro = self.retornarQuadroMP(pedido.processo_id,entrada_tp, n_pagina);
-        }
-        else{
-            alert("Endereço inválido!");
+            else{
+                alert("Endereço inválido!");
+            }
+        }else{
+            alert("Processo Não Existe!");
         }
     }
 

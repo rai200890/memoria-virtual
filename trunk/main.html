@@ -18,7 +18,7 @@
             <h5>Configuração</h5>
             <div class="form-horizontal" data-bind="with: params">
                 <div class="row" >
-                    <label class="control-label">Tamanho TLB </label>
+                    <label class="control-label">Qtd. Entradas TLB </label>
                     <input type="text" class="input-mini" data-bind="value: tam_tlb"/>
                 </div>
                 <div class="row" >
@@ -38,14 +38,30 @@
                     <input type="text" class="input-mini" data-bind="value: tam_endereco" placeholder="Tamanho bits End. log."/>
                 </div>
                 <div class="row">
-                    <label class="control-label">LRU
-                        <input type="radio" name="LRU" value="LRU" data-bind="checked: politica" />
+                    <label class="control-label">Politica</label>
+                <div class="form-inline pull-right">
+                    <label>LRU
+                        <input type="radio" name="politica" value="LRU" data-bind="checked: politica" />
                     </label>
-                    <label class="control-label">FIFO
-                        <input type="radio" name="LRU" value="FIFO" data-bind="checked: politica" />
+                    <label>FIFO
+                        <input type="radio" name="politica" value="FIFO" data-bind="checked: politica" />
+                    </label>
+                    </div>
+                </div>
+            <div class="row">
+                <label class="control-label">Escopo Substituição</label>
+                <div class="form-inline pull-right">
+                    <label>LOCAL
+                        <input type="radio" name="escopo" value="LOCAL"  disabled data-bind="checked: escopo_substituicao" />
+                    </label>
+                    <label>GLOBAL
+                        <input type="radio" name="escopo" value="GLOBAL" data-bind="checked: escopo_substituicao" />
                     </label>
                 </div>
-                <button class="btn-small btn-inverse" data-bind="click: $root.iniciarMemoriaVirtual">Iniciar</button>
+            </div>
+                <div class="row">
+                <button class="btn-small btn-inverse pull-right" data-bind="click: $root.iniciarMemoriaVirtual">Iniciar</button>
+            </div>
             </div>
         </div>
         <div class="well" >
