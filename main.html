@@ -34,11 +34,15 @@
                     <input type="text" class="input-mini" data-bind="value: tam_quadro" placeholder="Tamanho Quadro"/>
                 </div>
                 <div class="row">
+                    <label class="control-label">Tamanho em bits do endereço lógico </label>
+                    <input type="text" class="input-mini" data-bind="value: tam_endereco" placeholder="Tamanho bits End. log."/>
+                </div>
+                <div class="row">
                     <label class="control-label">LRU
-                        <input type="radio" name="LRU" value="true" data-bind="checked: lru" />
+                        <input type="radio" name="LRU" value="LRU" data-bind="checked: politica" />
                     </label>
                     <label class="control-label">FIFO
-                        <input type="radio" name="LRU" value="false" checked="checked" data-bind="checked: lru" />
+                        <input type="radio" name="LRU" value="FIFO" data-bind="checked: politica" />
                     </label>
                 </div>
                 <button class="btn-small btn-inverse" data-bind="click: $root.iniciarMemoriaVirtual">Iniciar</button>
@@ -111,7 +115,7 @@
             <table class="table table-bordered table-condensed table-striped">
                 <thead>
                 <tr>
-                    <th>Página Virtual</th>
+                    <th>Processo ID</th>
                     <th>P</th>
                     <th>M</th>
                     <th>Nº do Quadro</th>
@@ -119,7 +123,7 @@
                 </thead>
                 <tbody data-bind="foreach: entradas">
                 <tr data-bind="with: entrada_tp">
-                    <td data-bind=""></td>
+                    <td data-bind="text: $parent.processo_id"></td>
                     <td data-bind="text: p"></td>
                     <td data-bind="text: m"></td>
                     <td data-bind="text: n_quadro"></td>
