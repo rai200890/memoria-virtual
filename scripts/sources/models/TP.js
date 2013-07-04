@@ -3,8 +3,7 @@ function EntradaTP(){
     this.m = ko.observable(false);
     this.n_quadro = ko.observable(null);
 }
-//na escrita seta bit de modificado
-//4 é o tamanho do conjunto residente
+
 function TP(processo_id, n_entradas){
     var self = this;
     self.processo_id = processo_id;
