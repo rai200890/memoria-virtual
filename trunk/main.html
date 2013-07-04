@@ -1,195 +1,194 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-store, no-cache, must-revalidate, Post-Check=0, Pre-Check=0">
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
     <META HTTP-EQUIV="Expires" CONTENT="-1">
     <title>Memória Virtual</title>
     <script type='text/javascript' src="scripts/jquery-2.0.2.min.js"></script>
     <script type='text/javascript' src="scripts/knockout-2.2.1.js"></script>
-    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <link href="css/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <script type='text/javascript' src="css/bootstrap/js/bootstrap.js"></script>
     <script data-main="scripts/main" src="require.js"></script>
 </head>
 <body>
-<div class="row">
-    <div class="span4">
-        <div class="well">
-            <h5>Configuração</h5>
-            <div class="form-horizontal" data-bind="with: params">
-                <div class="row" >
-                    <label class="control-label">Qtd. Entradas TLB </label>
-                    <input type="text" class="input-mini" data-bind="value: tam_tlb"/>
-                </div>
-                <div class="row" >
-                    <label class="control-label">Tamanho MP </label>
-                    <input type="text" class="input-mini" data-bind="value: tam_mp"/>
-                </div>
-                <div class="row">
-                    <label class="control-label">Tamanho MS </label>
-                    <input type="text" class="input-mini" data-bind="value: tam_ms" placeholder="Tamanho MS"/>
-                </div>
-                <div class="row">
-                    <label class="control-label">Tamanho Quadro </label>
-                    <input type="text" class="input-mini" data-bind="value: tam_quadro" placeholder="Tamanho Quadro"/>
-                </div>
-                <div class="row">
-                    <label class="control-label">Tamanho em bits do endereço lógico </label>
-                    <input type="text" class="input-mini" data-bind="value: tam_endereco" placeholder="Tamanho bits End. log."/>
-                </div>
-                <div class="row">
-                    <label class="control-label">Politica</label>
-                <div class="form-inline pull-right">
-                    <label>LRU
-                        <input type="radio" name="politica" value="LRU" data-bind="checked: politica" />
-                    </label>
-                    <label>FIFO
-                        <input type="radio" name="politica" value="FIFO" data-bind="checked: politica" />
-                    </label>
+<div class="container-fluid">
+    <div class="row">
+        <div class="span4">
+            <div class="well">
+                <h5>Configuração</h5>
+                <div class="form-horizontal" data-bind="with: params">
+                    <div class="row" >
+                        <label class="control-label">Qtd. Entradas TLB </label>
+                        <input type="text" class="input-mini" data-bind="value: tam_tlb"/>
+                    </div>
+                    <div class="row" >
+                        <label class="control-label">Tamanho MP </label>
+                        <input type="text" class="input-mini" data-bind="value: tam_mp"/>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">Tamanho MS </label>
+                        <input type="text" class="input-mini" data-bind="value: tam_ms" placeholder="Tamanho MS"/>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">Tamanho Quadro </label>
+                        <input type="text" class="input-mini" data-bind="value: tam_quadro" placeholder="Tamanho Quadro"/>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">Tamanho em bits do endereço lógico </label>
+                        <input type="text" class="input-mini" data-bind="value: tam_endereco" placeholder="Tamanho bits End. log."/>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">Politica</label>
+                        <div class="form-inline pull-right">
+                            <label>LRU
+                                <input type="radio" name="politica" value="LRU" data-bind="checked: politica" />
+                            </label>
+                            <label>FIFO
+                                <input type="radio" name="politica" value="FIFO" data-bind="checked: politica" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">Escopo Substituição</label>
+                        <div class="form-inline pull-right">
+                            <label>LOCAL
+                                <input type="radio" name="escopo" value="LOCAL"  disabled data-bind="checked: escopo_substituicao" />
+                            </label>
+                            <label>GLOBAL
+                                <input type="radio" name="escopo" value="GLOBAL" data-bind="checked: escopo_substituicao" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button class="btn-small btn-inverse pull-right" data-bind="click: $root.iniciarMemoriaVirtual">Iniciar</button>
                     </div>
                 </div>
-            <div class="row">
-                <label class="control-label">Escopo Substituição</label>
-                <div class="form-inline pull-right">
-                    <label>LOCAL
-                        <input type="radio" name="escopo" value="LOCAL"  disabled data-bind="checked: escopo_substituicao" />
-                    </label>
-                    <label>GLOBAL
-                        <input type="radio" name="escopo" value="GLOBAL" data-bind="checked: escopo_substituicao" />
-                    </label>
+            </div>
+            <div class="well" >
+                <h5>Carregar Processo</h5>
+                <div class="form-horizontal" data-bind="with: $root.novoProcesso">
+                    <input type="text" class="input-mini" placeholder="ID" data-bind="value: id"/>
+                    <input type="text" class="input-medium" placeholder="Tamanho" data-bind="value: tamanho"/>
+                    <button class="btn-small btn-inverse" data-bind="click: $root.carregarProcesso">Carregar</button>
                 </div>
             </div>
-                <div class="row">
-                <button class="btn-small btn-inverse pull-right" data-bind="click: $root.iniciarMemoriaVirtual">Iniciar</button>
-            </div>
-            </div>
-        </div>
-        <div class="well" >
-            <h5>Carregar Processo</h5>
-            <div class="form-horizontal" data-bind="with: $root.novoProcesso">
-                <input type="text" class="input-mini" placeholder="ID" data-bind="value: id"/>
-                <input type="text" class="input-medium" placeholder="Tamanho" data-bind="value: tamanho"/>
-                <button class="btn-small btn-inverse" data-bind="click: $root.carregarProcesso">Carregar</button>
+            <div class="well">
+                <h5>Pedido</h5>
+                <div class="form-inline" data-bind="with: novoPedido">
+                    <input type="text" class="input-medium" placeholder="Processo ID" data-bind="value: processo_id"/>
+                    <input type="text" class="input-medium" placeholder="Endereço Virtual" data-bind="value: endereco_virtual"/>
+                    <input type="checkbox" value="false" data-bind="checked: escrita"/><label>Escrita</label>
+                    <button class="btn btn-inverse btn-small" data-bind="click: $root.fazerPedido">Fazer Pedido </button>
+                </div>
             </div>
         </div>
-        <div class="well">
-            <h5>Pedido</h5>
-            <div class="form-inline" data-bind="with: novoPedido">
-                <input type="text" class="input-medium" placeholder="Processo ID" data-bind="value: processo_id"/>
-                <input type="text" class="input-medium" placeholder="Endereço Virtual" data-bind="value: endereco_virtual"/>
-                <input type="checkbox" value="false" data-bind="checked: escrita"/><label>Escrita</label>
-                <button class="btn btn-inverse btn-small" data-bind="click: $root.fazerPedido">Fazer Pedido </button>
+        <div class="span6">
+            <div class="well" data-bind="with: memoriaVirtual().mp">
+                <h5>MP</h5>
+                <table class="table table-bordered table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Quadro</th>
+                        <th>U</th>
+                        <th>M</th>
+                        <th>Página</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: quadros">
+                    <tr>
+                        <td data-bind="text: $index"></td>
+                        <td data-bind="text: u"></td>
+                        <td data-bind="text: m"></td>
+                        <td data-bind="text: pagina"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="well" data-bind="with: memoriaVirtual().ms">
+                <h5>Memória Secundária</h5>
+                <h5 class="alert" data-bind="text: memoriaDisponivel"></h5>
+                <table class="table table-striped table-bordered table-condensed" data-bind="visible: processos().length > 0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tamanho</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: processos">
+                    <tr>
+                        <td data-bind="text: id"></td>
+                        <td data-bind="text: tamanho"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="span5">
+            <div class="well" data-bind="with: memoriaVirtual().tlb">
+                <h5>TLB</h5>
+                <table class="table table-bordered table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Processo ID</th>
+                        <th>P</th>
+                        <th>M</th>
+                        <th>Nº do Quadro</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: entradas">
+                    <tr data-bind="with: entrada_tp">
+                        <td data-bind="text: $parent.processo_id"></td>
+                        <td data-bind="text: p"></td>
+                        <td data-bind="text: m"></td>
+                        <td data-bind="text: n_quadro"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="well" data-bind="with: memoriaVirtual()">
+                <h5>Tabelas de Página</h5>
+                <table class="table table-bordered table-condensed table-striped" data-bind="visible: tps().length > 0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Qtd de Páginas</th>
+                        <th> </th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: tps">
+                    <tr>
+                        <td data-bind="text: processo_id"></td>
+                        <td data-bind="text: n_entradas"></td>
+                        <td><button class="btn btn-inverse btn-small" data-bind="click: $root.mostrarTPSelecionada">Mostrar</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table data-bind="with: $root.tpSelecionada, visible: $root.tpSelecionada()" class="table table-bordered table-condensed table-striped">
+                    <thead>
+                    <tr><th colspan="4">TP do Processo <span data-bind="text:processo_id"></span></th></tr>
+                    <tr>
+                        <th>i</th>
+                        <th>P</th>
+                        <th>M</th>
+                        <th>Nº do Quadro</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach: entradas">
+                    <tr>
+                        <td data-bind="text: $index"></td>
+                        <td data-bind="text: p"></td>
+                        <td data-bind="text: m"></td>
+                        <td data-bind="text: n_quadro"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <div class="span6">
-        <div class="well" data-bind="with: memoriaVirtual().mp">
-            <h5>MP</h5>
-            <table class="table table-bordered table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>Quadro</th>
-                    <th>U</th>
-                    <th>M</th>
-                    <th>Página</th>
-                </tr>
-                </thead>
-                <tbody data-bind="foreach: quadros">
-                <tr>
-                    <td data-bind="text: $index"></td>
-                    <td data-bind="text: u"></td>
-                    <td data-bind="text: m"></td>
-                    <td data-bind="text: pagina"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="well" data-bind="with: memoriaVirtual().ms">
-            <h5>Memória Secundária</h5>
-            <h5 class="alert" data-bind="text: memoriaDisponivel"></h5>
-            <table class="table table-striped table-bordered table-condensed" data-bind="visible: processos().length > 0">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tamanho</th>
-                </tr>
-                </thead>
-                <tbody data-bind="foreach: processos">
-                <tr>
-                    <td data-bind="text: id"></td>
-                    <td data-bind="text: tamanho"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-    <div class="span5">
-        <div class="well" data-bind="with: memoriaVirtual().tlb">
-            <h5>TLB</h5>
-            <table class="table table-bordered table-condensed table-striped">
-                <thead>
-                <tr>
-                    <th>Processo ID</th>
-                    <th>P</th>
-                    <th>M</th>
-                    <th>Nº do Quadro</th>
-                </tr>
-                </thead>
-                <tbody data-bind="foreach: entradas">
-                <tr data-bind="with: entrada_tp">
-                    <td data-bind="text: $parent.processo_id"></td>
-                    <td data-bind="text: p"></td>
-                    <td data-bind="text: m"></td>
-                    <td data-bind="text: n_quadro"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="well" data-bind="with: memoriaVirtual()">
-            <h5>Tabelas de Página</h5>
-            <table class="table table-bordered table-condensed table-striped" data-bind="visible: tps().length > 0">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Qtd de Páginas</th>
-                    <th> </th>
-                </tr>
-                </thead>
-                <tbody data-bind="foreach: tps">
-                <tr>
-                    <td data-bind="text: processo_id"></td>
-                    <td data-bind="text: n_entradas"></td>
-                    <td><button class="btn btn-inverse btn-small" data-bind="click: $root.mostrarTPSelecionada">Mostrar</button></td>
-                </tr>
-                </tbody>
-            </table>
-            <table data-bind="with: $root.tpSelecionada, visible: $root.tpSelecionada()" class="table table-bordered table-condensed table-striped">
-                <thead>
-                <tr><th colspan="4">TP do Processo <span data-bind="text:processo_id"></span></th></tr>
-                <tr>
-                    <th>i</th>
-                    <th>P</th>
-                    <th>M</th>
-                    <th>Nº do Quadro</th>
-                </tr>
-                </thead>
-                <tbody data-bind="foreach: entradas">
-                <tr>
-                    <td data-bind="text: $index"></td>
-                    <td data-bind="text: p"></td>
-                    <td data-bind="text: m"></td>
-                    <td data-bind="text: n_quadro"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="row">
-
-</div>
 </div>
 </body>
 </html>
