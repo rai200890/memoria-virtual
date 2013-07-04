@@ -13,10 +13,10 @@ function MP(n_quadros, politica){
     self.queue = function(quadroIndice){
         var pos = $.inArray(quadroIndice, self.filaSubstituicao());
         if(pos != -1)
-            self.filaSubstituicao(self.filaSubstituicao().splice(pos,1));
+            self.filaSubstituicao().splice(pos,1);
 
         if(self.filaSubstituicao.length > self.n_quadros)
-            self.filaSubstituicao.unshift();
+            self.filaSubstituicao.shift();
 
         self.filaSubstituicao.push(quadroIndice);
     }
@@ -27,11 +27,11 @@ function MP(n_quadros, politica){
         }
     };
 
-    self.carregarQuadro = function(i, pagina){
+    self.carregaQuadro = function(i){
         var quadro = self.quadros[i];
-        quadro = pagina;
         quadro.u(true);
         self.queue(i);
+        return quadro;
     }
 
     self.modificarQuadro = function(i,pagina){
@@ -49,10 +49,12 @@ function MP(n_quadros, politica){
     }
 
     self.getIndiceQuadroLivre = function(){
-        var index;
+        var index = null;
         $.each(self.quadros,function(i, quadro){
-            index = i;
-            if(!quadro.u()) return false;
+            if(!quadro.u()){
+                index = i;
+                return false;
+            }
         })
         return index;
     }
